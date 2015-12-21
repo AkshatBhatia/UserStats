@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="django" name="Django">
+      <configuration>
+        <option name="rootFolder" value="$MODULE_DIR$" />
+        <option name="settingsModule" value="settings.py" />
+        <option name="manageScript" value="manage.py" />
+        <option name="environment" value="&lt;map/&gt;" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Django" />
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/../mysite/polls/templates/polls" />
+        <option value="$MODULE_DIR$/../coconut/conf/maintenance/ei/content" />
+        <option value="$MODULE_DIR$/../coconut/conf/maintenance/ei2/content" />
+        <option value="$MODULE_DIR$/../coconut/conf/maintenance/ei3/content" />
+        <option value="$MODULE_DIR$/../coconut/conf/maintenance/ela4/content" />
+        <option value="$MODULE_DIR$/../coconut/conf/maintenance/lva1/content" />
+        <option value="$MODULE_DIR$/../coconut/carddav/templates/carddav" />
+        <option value="$MODULE_DIR$/../coconut/contacts/static/contacts/js/v2/templates" />
+        <option value="$MODULE_DIR$/../coconut/contacts/static/contacts/js/v3/templates" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/staff" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/js" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/ads" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/staff" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/mobile" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/mobile/linkedin" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/sidebar" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/partials" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/your_day" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/marketing" />
+        <option value="$MODULE_DIR$/../coconut/contacts/templates/contacts/merged_contacts" />
+        <option value="$MODULE_DIR$/../coconut/simpleauth/templates/staff" />
+        <option value="$MODULE_DIR$/../coconut/dev_scripts/templates_builder/node_modules/node-uuid/test" />
+        <option value="$MODULE_DIR$/../coconut/simplequeue/templates/staff" />
+        <option value="$MODULE_DIR$/../coconut/third_party/djangologging/templates" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/gis/templates/gis" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/gis/templates/gis/admin" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/gis/templates/gis/google" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/admin/templates/admin" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/admin/templates/admin/auth/user" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/admin/templates/admin/includes" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/admin/templates/admin/edit_inline" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/admin/templates/registration" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/django/contrib/admindocs/templates/admin_doc" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework/admin" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework/inline" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework/filters" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework/vertical" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework/horizontal" />
+        <option value="$MODULE_DIR$/../testenv/lib/python2.7/site-packages/rest_framework/templates/rest_framework/pagination" />
+        <option value="$MODULE_DIR$/../coconut_trunk/conf/maintenance/ei/content" />
+        <option value="$MODULE_DIR$/../coconut_trunk/conf/maintenance/ei2/content" />
+        <option value="$MODULE_DIR$/../coconut_trunk/conf/maintenance/ei3/content" />
+        <option value="$MODULE_DIR$/../coconut_trunk/conf/maintenance/ela4/content" />
+        <option value="$MODULE_DIR$/../coconut_trunk/conf/maintenance/lva1/content" />
+        <option value="$MODULE_DIR$/../coconut_trunk/carddav/templates/carddav" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/static/contacts/js/v2/templates" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/static/contacts/js/v3/templates" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/staff" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/js" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/ads" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/staff" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/mobile" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/mobile/linkedin" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/sidebar" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/partials" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/your_day" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/marketing" />
+        <option value="$MODULE_DIR$/../coconut_trunk/contacts/templates/contacts/merged_contacts" />
+        <option value="$MODULE_DIR$/../coconut_trunk/simpleauth/templates/staff" />
+        <option value="$MODULE_DIR$/../coconut_trunk/dev_scripts/templates_builder/node_modules/node-uuid/test" />
+        <option value="$MODULE_DIR$/../coconut_trunk/simplequeue/templates/staff" />
+        <option value="$MODULE_DIR$/../coconut_trunk/third_party/djangologging/templates" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/public" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/public/scmp/scripts/lib/i18n" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/compass/gem_home/gems/fssm-0.2.10/profile" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/compass/gem_home/gems/archetype-0.0.1.pre.12/templates/example" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/sc-temp/public" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/sc-temp/public/scmp/scripts/lib/i18n" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/scala-2.10/testng" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/scala-2.10/testng/old" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/scala-2.10/testng/old/NewHireProfileSuite" />
+        <option value="$MODULE_DIR$/../newhire-red-frontend_trunk/newhire-red-frontend/target/scala-2.10/testng/NewHireProfileSuite" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-api/docs/javadoc" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-api/docs/javadoc/com/linkedin/internal/newhireonboardred" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-impl/docs/javadoc" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-impl/docs/javadoc/com/linkedin/newhireonboardred/db" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-impl/docs/javadoc/com/linkedin/newhireonboardred/impl" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-impl/reports/tests" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-impl/reports/tests/classes" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-impl/reports/tests/packages" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-factory/docs/javadoc" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-factory/docs/javadoc/com/linkedin/newhireonboardred/factory" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-factory/reports/tests" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-factory/reports/tests/classes" />
+        <option value="$MODULE_DIR$/../newhireonboard-backend-red_trunk/build/newhireonboard-factory/reports/tests/packages" />
+      </list>
+    </option>
+  </component>
+</module>
