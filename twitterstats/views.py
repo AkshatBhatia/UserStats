@@ -1,16 +1,16 @@
-from serializers.CommentSerializer import CommentSerializer
+from serializers.CommentSerializer import TweetSerializer
+from models.Comments import Tweet
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from models.Comments import comment
 from django.shortcuts import redirect
 import tweepy
 
 consumer_token = 'Jjv00qLJ2AcGvf0HHLyc6kPhm'
 consumer_secret = 'VXHkcX1SzPb8ubzcBHhR9FmFwx7BTdKpmogEszHJiosRCSUGPq'
 
-class CommentDetails(APIView):
+class TweetDetails(APIView):
     def __init__(self):
         self.myname = "Akshat"
 
@@ -19,8 +19,15 @@ class CommentDetails(APIView):
             return redirect(get_redirect_url(request.request))
         else:
             api = get_api(request.request)
-            print api.user_timeline()
-            serializer = CommentSerializer(comment)
+            user_tweets = api.user_timeline()
+            tweets = []
+            for tweet in user_tweets:
+                tweets.append(Tweet(author=tweet.author.screen_name,
+                                    text=tweet.text,
+                                    fav_count=tweet.favorite_count,
+                                    retweet_count=tweet.retweet_count))
+
+            serializer = TweetSerializer(tweets, many=True)
             return Response(serializer.data)
 
 
