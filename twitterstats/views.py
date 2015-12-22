@@ -1,5 +1,8 @@
-from serializers.CommentSerializer import TweetSerializer
+from serializers.CommentSerializer import TweetListSerializer
+from serializers.CommentSerializer import TwitterUserSerializer
 from models.Comments import Tweet
+from models.Comments import TweetList
+from models.Comments import TwitterUser
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -10,7 +13,7 @@ import tweepy
 consumer_token = 'Jjv00qLJ2AcGvf0HHLyc6kPhm'
 consumer_secret = 'VXHkcX1SzPb8ubzcBHhR9FmFwx7BTdKpmogEszHJiosRCSUGPq'
 
-class TweetDetails(APIView):
+class UserDetails(APIView):
     def __init__(self):
         self.myname = "Akshat"
 
@@ -19,15 +22,23 @@ class TweetDetails(APIView):
             return redirect(get_redirect_url(request.request))
         else:
             api = get_api(request.request)
-            user_tweets = api.user_timeline()
-            tweets = []
-            for tweet in user_tweets:
-                tweets.append(Tweet(author=tweet.author.screen_name,
-                                    text=tweet.text,
-                                    fav_count=tweet.favorite_count,
-                                    retweet_count=tweet.retweet_count))
+            user_details = api.me()
 
-            serializer = TweetSerializer(tweets, many=True)
+            user = TwitterUser(user_details.id_str, user_details.name, user_details.screen_name,
+                        user_details.location, user_details.created_at, user_details.profile_image_url,
+                        user_details.followers_count, user_details.favourites_count, user_details.statuses_count)
+
+            serializer = TwitterUserSerializer(user)
+
+            # user_tweets = api.user_timeline()
+            # tweets = []
+            # for tweet in user_tweets:
+            #     tweets.append(Tweet(author=tweet.author.screen_name,
+            #                         text=tweet.text,
+            #                         fav_count=tweet.favorite_count,
+            #                         retweet_count=tweet.retweet_count))
+            #
+            # serializer = TweetListSerializer(TweetList(tweets))
             return Response(serializer.data)
 
 
@@ -66,7 +77,7 @@ def get_redirect_url(request):
     auth = tweepy.OAuthHandler(consumer_token, consumer_secret)
 
     try:
-        redirect_url = auth.get_authorization_url()
+        redirect_url = auth.get_authorization_url(True)
     except tweepy.TweepError:
         print 'error! failed to get request token.'
 
