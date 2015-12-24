@@ -21,7 +21,8 @@ class TwitterUser(object):
         self.statuses_count = statuses_count
 
 class Tweet(object):
-    def __init__(self, author, text, fav_count, retweet_count):
+    def __init__(self, id_str, author, text, fav_count, retweet_count):
+        self.id_str = id_str
         self.author = author
         self.text = text
         self.favorite_count = fav_count

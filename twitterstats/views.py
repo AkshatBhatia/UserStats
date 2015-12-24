@@ -1,5 +1,7 @@
 from serializers.CommentSerializer import TweetListSerializer
 from serializers.CommentSerializer import TwitterUserSerializer
+from django.http import HttpResponse
+from django.template import RequestContext, loader
 from models.Comments import Tweet
 from models.Comments import TweetList
 from models.Comments import TwitterUser
@@ -30,16 +32,38 @@ class UserDetails(APIView):
 
             serializer = TwitterUserSerializer(user)
 
-            # user_tweets = api.user_timeline()
-            # tweets = []
-            # for tweet in user_tweets:
-            #     tweets.append(Tweet(author=tweet.author.screen_name,
-            #                         text=tweet.text,
-            #                         fav_count=tweet.favorite_count,
-            #                         retweet_count=tweet.retweet_count))
-            #
-            # serializer = TweetListSerializer(TweetList(tweets))
             return Response(serializer.data)
+
+@api_view(('GET',))
+def user_tweets(request):
+    if not check_key(request):
+        return redirect(get_redirect_url(request))
+    else:
+        api = get_api(request)
+        user = request.GET.get('user', None)
+        user_tweets = None
+        if user:
+            user_tweets = tweepy.Cursor(api.user_timeline, id=user, count=200).items(1000)
+        else:
+            user_tweets = tweepy.Cursor(api.user_timeline, count=200).items(1000)
+        tweets = []
+        for tweet in user_tweets:
+            tweets.append(Tweet(id_str=tweet.id_str,
+                                author=tweet.author.screen_name,
+                                text=tweet.text,
+                                fav_count=tweet.favorite_count,
+                                retweet_count=tweet.retweet_count))
+
+        serializer = TweetListSerializer(TweetList(tweets))
+        return Response(serializer.data)
+
+# @api_view(('GET',))
+# def tweet_stats_by_month(request):
+#     if not check_key(request):
+#         return redirect(get_redirect_url(request))
+#     else:
+#         api = get_api(request)
+#         user = request.GET.get('user', None)
 
 
 @api_view(('GET',))
@@ -58,7 +82,7 @@ def auth(request):
 
     request.session['access_key_tw'] = oauth.access_token
     request.session['access_secret_tw'] = oauth.access_token_secret
-    return redirect(reverse('twitterstats'))
+    return redirect(reverse('userinfo'))
 
 def check_key(request):
     """
@@ -96,5 +120,11 @@ def get_api(request):
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
-        'twitterstats': reverse('twitterstats', request=request, format=format),
+        'userinfo': reverse('userinfo', request=request, format=format),
+        'tweets': reverse('usertweets', request=request, format=format),
     })
+
+def index(request):
+    template = loader.get_template('twitterstats/index.html')
+    context = RequestContext(request, {})
+    return HttpResponse(template.render(context))

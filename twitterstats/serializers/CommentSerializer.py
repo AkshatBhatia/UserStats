@@ -18,6 +18,7 @@ class TwitterUserSerializer(serializers.Serializer):
 
 
 class TweetSerializer(serializers.Serializer):
+    id_str = serializers.CharField()
     author = serializers.CharField(max_length=300)
     text = serializers.CharField(max_length=140)
     favorite_count = serializers.IntegerField()
