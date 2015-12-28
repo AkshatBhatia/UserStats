@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.shortcuts import redirect
 import tweepy
+import datetime
 
 consumer_token = 'Jjv00qLJ2AcGvf0HHLyc6kPhm'
 consumer_secret = 'VXHkcX1SzPb8ubzcBHhR9FmFwx7BTdKpmogEszHJiosRCSUGPq'
@@ -48,14 +49,20 @@ def user_tweets(request):
             user_tweets = tweepy.Cursor(api.user_timeline, count=200).items(1000)
         tweets = []
         for tweet in user_tweets:
-            tweets.append(Tweet(id_str=tweet.id_str,
-                                author=tweet.author.screen_name,
-                                text=tweet.text,
-                                fav_count=tweet.favorite_count,
-                                retweet_count=tweet.retweet_count))
+            if not tweet.text.startswith("RT"):
+                tweets.append(Tweet(id_str=tweet.id_str,
+                                    author=tweet.author.screen_name,
+                                    text=tweet.text,
+                                    fav_count=tweet.favorite_count,
+                                    retweet_count=tweet.retweet_count,
+                                    created_at=getEpochTime(tweet.created_at)))
 
         serializer = TweetListSerializer(TweetList(tweets))
         return Response(serializer.data)
+
+def getEpochTime(date):
+    return int((date - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+
 
 # @api_view(('GET',))
 # def tweet_stats_by_month(request):
@@ -82,7 +89,7 @@ def auth(request):
 
     request.session['access_key_tw'] = oauth.access_token
     request.session['access_secret_tw'] = oauth.access_token_secret
-    return redirect(reverse('userinfo'))
+    return redirect(reverse('index'))
 
 def check_key(request):
     """

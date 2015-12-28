@@ -23,6 +23,7 @@ class TweetSerializer(serializers.Serializer):
     text = serializers.CharField(max_length=140)
     favorite_count = serializers.IntegerField()
     retweet_count = serializers.IntegerField()
+    created_at = serializers.IntegerField()
 
 class TweetListSerializer(serializers.Serializer):
     tweets = TweetSerializer(many=True)
