@@ -20,10 +20,28 @@ class TwitterUserSerializer(serializers.Serializer):
 class TweetSerializer(serializers.Serializer):
     id_str = serializers.CharField()
     author = serializers.CharField(max_length=300)
-    text = serializers.CharField(max_length=140)
+    text = serializers.CharField(max_length=200)
     favorite_count = serializers.IntegerField()
     retweet_count = serializers.IntegerField()
     created_at = serializers.IntegerField()
+    entities = serializers.DictField()
+
+class TweetSummarySerializer(serializers.Serializer):
+    original_tweet_count = serializers.IntegerField()
+    retweet_count = serializers.IntegerField()
+    replies_count = serializers.IntegerField()
+    tweets_with_hashtags = serializers.IntegerField()
+    tweets_with_mentions = serializers.IntegerField()
+
 
 class TweetListSerializer(serializers.Serializer):
+    total_count = serializers.IntegerField()
     tweets = TweetSerializer(many=True)
+
+class TweetCacheSerializer(serializers.Serializer):
+    timestamp = serializers.IntegerField()
+    latest_id = serializers.CharField()
+    original_tweets = TweetSerializer(many=True)
+    retweets = TweetSerializer(many=True)
+    replies = TweetSerializer(many=True)
+

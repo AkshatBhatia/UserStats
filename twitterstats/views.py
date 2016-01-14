@@ -1,10 +1,9 @@
-from serializers.CommentSerializer import TweetListSerializer
-from serializers.CommentSerializer import TwitterUserSerializer
+from serializers.CommentSerializer import TweetListSerializer, TwitterUserSerializer, TweetCacheSerializer, TweetSummarySerializer
+from sets import Set
+from django.core.cache import cache
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from models.Comments import Tweet
-from models.Comments import TweetList
-from models.Comments import TwitterUser
+from models.Comments import Tweet, TweetCache, TweetList, TwitterUser, TweetSummary
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -40,25 +39,142 @@ def user_tweets(request):
     if not check_key(request):
         return redirect(get_redirect_url(request))
     else:
-        api = get_api(request)
-        user = request.GET.get('user', None)
-        user_tweets = None
-        if user:
-            user_tweets = tweepy.Cursor(api.user_timeline, id=user, count=200).items(1000)
-        else:
-            user_tweets = tweepy.Cursor(api.user_timeline, count=200).items(1000)
-        tweets = []
-        for tweet in user_tweets:
-            if not tweet.text.startswith("RT"):
-                tweets.append(Tweet(id_str=tweet.id_str,
-                                    author=tweet.author.screen_name,
-                                    text=tweet.text,
-                                    fav_count=tweet.favorite_count,
-                                    retweet_count=tweet.retweet_count,
-                                    created_at=getEpochTime(tweet.created_at)))
+        user = request.GET.get('user', '')
+        filters = request.GET\
+            .get('filters', "Tweet Type=Original Tweets;Media Type=Photos,Videos;Timeline=UserTimeline").split(";")
 
-        serializer = TweetListSerializer(TweetList(tweets))
+        filterMap = {}
+        for f in filters:
+            tokens = f.split("=")
+            filterMap[tokens[0]] = Set(tokens[1].split(","))
+
+        timeline = filterMap.get(u"Timeline").pop()
+
+        original_tweets, retweets, replies = get_tweets(request, user, timeline)
+
+        total_tweets = filter_by_tweet_type(filterMap, original_tweets, replies, retweets)
+
+        serializer = TweetListSerializer(TweetList(total_tweets))
         return Response(serializer.data)
+
+
+def filter_by_tweet_type(filterMap, original_tweets, replies, retweets):
+    total_tweets = []
+    tweet_type = filterMap.get(u"Tweet Type")
+    if u"Original Tweets" in tweet_type:
+        total_tweets += original_tweets
+    if u"Retweets" in tweet_type:
+        total_tweets += retweets
+    if u"Replies" in tweet_type:
+        total_tweets += replies
+    return total_tweets
+
+
+@api_view(('GET',))
+def tweet_summary(request):
+    if not check_key(request):
+        return redirect(get_redirect_url(request))
+    else:
+        user = request.GET.get('user', u'')
+        timeline = u"UserTimeline"
+        original_tweets, retweets, replies = get_tweets(request, user, timeline)
+
+        hashtags = {}
+        user_mentions = {}
+        tweets_with_hashtags, tweets_with_mentions, photos, videos, animated_gif = 0, 0, 0, 0, 0
+        for tweet in original_tweets + retweets + replies:
+            entities = tweet.get(u'entities')
+            tags = entities.get(u'hashtags')
+            if len(tags) > 0:
+                tweets_with_hashtags += 1
+
+            for hashtag in tags:
+                count = hashtags.get(hashtag.get(u'text'), 0) + 1
+                hashtags[hashtag.get(u'text')] = count
+
+            mentions = entities.get(u'user_mentions')
+            if len(mentions) > 0:
+                tweets_with_mentions += 1
+
+            for mention in mentions:
+                mention_user = mention.get(u'screen_name')
+                count = user_mentions.get(mention_user, 0) + 1
+                user_mentions[mention_user] = count
+
+        serializer = TweetSummarySerializer(TweetSummary(
+            len(original_tweets),
+            len(retweets),
+            len(replies),
+            tweets_with_hashtags,
+            tweets_with_mentions))
+
+        return Response(serializer.data)
+
+def get_tweets(request, user, timeline):
+    cache_key = user + "_" + timeline
+    data_cached, original_tweets, retweets, replies = get_cached_tweets(cache_key)
+    if data_cached:
+        print u'Got data from cache!!'
+        return original_tweets, retweets, replies
+    else:
+        api = get_api(request)
+        api_function = api.user_timeline
+        if u"HomeTimeline" == timeline:
+            api_function = api.home_timeline
+
+        if user:
+            user_tweets = tweepy.Cursor(api_function, id=user, count=200).items(1000)
+        else:
+            user_tweets = tweepy.Cursor(api_function, count=200).items(1000)
+
+        retweets = []
+        replies = []
+        original_tweets = []
+        latest_id = u"1"
+        for tweet in user_tweets:
+            if tweet.id_str > latest_id:
+                latest_id = tweet.id_str
+            t = Tweet(id_str=tweet.id_str,
+                      author=tweet.author.screen_name,
+                      text=tweet.text,
+                      fav_count=tweet.favorite_count,
+                      retweet_count=tweet.retweet_count,
+                      created_at=getEpochTime(tweet.created_at),
+                      entities =tweet.entities)
+            if tweet.text.startswith("RT"):
+                retweets.append(t)
+            elif tweet.text.startswith("@"):
+                replies.append(t)
+            else:
+                original_tweets.append(t)
+
+        save_to_cache(cache_key, original_tweets, retweets, replies, latest_id)
+
+        return original_tweets, retweets, replies
+
+def get_cached_tweets(cache_key):
+    cached_data = cache.get(cache_key)
+    if cached_data:
+        serializer = TweetCacheSerializer(data=cached_data)
+        serializer.is_valid()
+        if serializer.is_valid():
+            original_tweets = serializer.validated_data.get('original_tweets')
+            retweets = serializer.validated_data.get('retweets')
+            replies = serializer.validated_data.get('replies')
+            return True, original_tweets, retweets, replies
+
+    return False, None, None, None
+
+def save_to_cache(key, original_tweets, retweets, replies, latest_id):
+    serializer = TweetCacheSerializer(TweetCache(
+        getEpochTime(datetime.datetime.now()),
+        latest_id,
+        original_tweets,
+        retweets,
+        replies))
+
+    cache.set(key, serializer.data)
+
 
 def getEpochTime(date):
     return int((date - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)

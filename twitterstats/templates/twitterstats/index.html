@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Twitter Stats</title>
-    <style type="text/css">
-    </style>
 </head>
 <body>
 <!-- ========= -->
@@ -17,28 +15,47 @@
             <h1>Twitter Stats</h1>
         </header>
         <div class="input-group">
-            <input id="user" type="text" class="form-control" placeholder="Search for user tweets">
-            <span class="input-group-btn">
-                <button class="search btn btn-default" type="button">Go!</button>
+            <span class="input-group-addon" id="basic-addon1">@</span>
+            <input id="user" class="form-control" type="text" placeholder="Enter Twitter Handle...">
+            <span class="input-group-btn" id="filters">
+                <select class="selectpicker" multiple>
+                    <optgroup label="Tweet Type" data-max-options="3" data-min-options="1">
+                        <option selected="true">Original Tweets</option>
+                        <option>Retweets</option>
+                        <option>Replies</option>
+                    </optgroup>
+                    <optgroup label="Media Type" data-max-options="2">
+                        <option selected="true">Photos</option>
+                        <option selected="true">Videos</option>
+                    </optgroup>
+                    <optgroup label="Timeline" data-max-options="1">
+                        <option selected="true">UserTimeline</option>
+                        <option>HomeTimeline</option>
+                    </optgroup>
+                </select>
+
+                <button class="search btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
             </span>
         </div><!-- /input-group -->
-        <section id = "charts">
+        <section id="charts">
             <div id="chart1"><svg></svg></div>
         </section>
-        <section id="main">
-            <table style="width:100%" class="table table-striped table-bordered table-hover sortable">
-                <thead>
-                    <tr>
-                        <th>TweetId</th>
-                        <th>Author</th>
-                        <th>Text</th>
-                        <th data-defaultsort="desc">Favorites</th>
-                        <th>Retweets</th></tr>
-                </thead>
-            <tbody id="tweet-list">
-            </tbody>
-            </table>
-        </section>
+            <section id="main">
+                <table style="width:100%" class="table table-striped table-bordered table-hover sortable">
+                    <thead>
+                        <tr>
+                            <th>TweetId</th>
+                            <th>Author</th>
+                            <th>Text</th>
+                            <th data-defaultsort="desc">Favorites</th>
+                            <th>Retweets</th></tr>
+                    </thead>
+                <tbody id="tweet-list">
+                </tbody>
+                </table>
+            </section>
     </section>
 </div>
 <!-- ========= -->
@@ -63,6 +80,10 @@
 <script src="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css">
 
+
+<script src="/static/dist/bootstrap-tagsinput.min.js"></script>
+<link rel="stylesheet" href="/static/dist/bootstrap-tagsinput.css">
+
 <!-- =============== -->
 <!-- Javascript code -->
 <!-- =============== -->
@@ -74,150 +95,17 @@
     <td><%= retweet_count %></td>
 </script>
 
-<script type="text/javascript">
-    // your JS code goes here
-    var app = {}; // create namespace for our app
+<script src="/static/javascript/index.js"></script>
+<link rel="stylesheet" href="/static/CSS/index.css">
 
-    //Models
-    app.Tweet = Backbone.Model.extend({
-       defaults: {
-           id_str: "id_str",
-           author: "Author",
-           text: "This is a tweet text",
-           favorite_count: "favorite_count",
-           retweet_count: "retweet_count",
-       }
-    });
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
 
-    // Collections
-    app.Tweets = Backbone.Collection.extend({
-        model: app.Tweet,
-        url: '/twitterstats/tweets',
-        parse: function(data) {
-            return data.tweets;
-        }
-    });
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
 
-    app.tweets = new app.Tweets();
-
-    // Views
-    app.TweetView = Backbone.View.extend({
-        tagName: 'tr',
-        template: _.template($('#tweet-template').html()),
-        render: function(){
-            this.$el.html(this.template(this.model.toJSON()));
-            return this; // enable chained calls
-        }
-    });
-
-    app.AppView = Backbone.View.extend({
-        el: '#twitterstatsapp',
-        userId: '#user',
-        user: '',
-        headers: _.template('<tr><th>TweetId</th><th>Author</th><th>Text</th><th data-defaultsort="desc">Favorites</th><th>Retweets</th></tr>'),
-
-        events: {
-            "click .search": "searchUser",
-        },
-        initialize: function () {
-            app.tweets.on('reset', this.addAll, this);
-            this.fetchTweets();
-        },
-        fetchTweets: function() {
-            var that = this;
-            app.tweets.fetch({data: {user: this.user},
-            success: function () {
-                drawGraph();
-                that.addAll();
-            }});
-        },
-        addOne: function(tweet){
-            var view = new app.TweetView({model: tweet});
-            this.$('#tweet-list').append(view.render().el);
-        },
-        addAll: function(){
-            console.log("Reset is called");
-            this.$('#tweet-list').empty();
-            app.tweets.each(this.addOne, this);
-        },
-        searchUser: function(){
-            this.user = $(this.userId).val();
-            this.fetchTweets();
-        }
-    });
-
-    var appView = new app.AppView();
-
-    // D3 pair of timeseries for retweets and favorites
-    function drawGraph() {
-        return nv.addGraph(function () {
-            var chart = nv.models.multiBarChart()
-                            .height(500)
-                            .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-                            .rotateLabels(0)      //Angle to rotate x-axis labels.
-                            .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-                            .stacked(true)
-                            .x(function (d) {
-                                return new Date(d.x);
-                            })
-                    ;
-
-{#            var chart = nv.models.lineWithFocusChart()#}
-{#                    .x(function (d) {#}
-{#                        return new Date(d.x);#}
-{#                    });#}
-
-            chart.xAxis
-                    .tickFormat(function(d) { return d3.time.format("%Y-%m-%d")(d) });
-
-            chart.yAxis
-                    .tickFormat(d3.format(',.f'));
-
-            chart.xScale = d3.time.scale();
-
-            d3.select('#chart1 svg')
-                    .attr("height", 500)
-                    .datum(tweetData())
-                    .transition().duration(100)
-                    .call(chart);
-
-            nv.utils.windowResize(chart.update);
-
-            return chart;
-        });
-    }
-
-    function retweet_ts() {
-        return app.tweets.toJSON()
-                .map(function(d) {
-                    return {x: d.created_at, y: d.retweet_count};
-                }).reverse();
-    }
-
-    function favorite_ts() {
-        return app.tweets.toJSON()
-                .map(function(d) {
-                    return {x: d.created_at, y: d.favorite_count};
-                }).reverse();
-    }
-
-    function tweetData() {
-        return [
-            {
-                key: 'Retweet Count',
-                values: retweet_ts()
-            },
-            {
-               key: 'Favorite Count',
-                values: favorite_ts()
-            }
-        ];
-    }
-
-    function xDomain() {
-        return retweet_ts().map(function(d) { return d.x; });
-    }
-</script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/i18n/defaults-*.min.js"></script>
 
 </body>
 </html>
