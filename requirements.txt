@@ -1,0 +1,8 @@
+Django
+django-filter
+djangorestframework
+ipython
+markdown
+nltk
+prettytable
+tweepy
