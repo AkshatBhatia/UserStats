@@ -14,7 +14,7 @@ import tweepy
 import datetime
 
 consumer_token = 'Jjv00qLJ2AcGvf0HHLyc6kPhm'
-consumer_secret = 'VXHkcX1SzPb8ubzcBHhR9FmFwx7BTdKpmogEszHJiosRCSUGPq'
+consumer_secret = 'YOUR_CONSUMER_SECRET'
 
 class UserDetails(APIView):
     def __init__(self):
