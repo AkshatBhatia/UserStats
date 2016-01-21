@@ -36,14 +36,21 @@ class TweetList(object):
         self.total_count = len(tweets)
         self.tweets = tweets
 
+class MentionsCount(object):
+    def __init__(self, mention, count):
+        self.mention = mention
+        self.count = count
+
 class TweetSummary(object):
     def __init__(self, original_count, retweet_count, replies_count,
-                 tweets_with_hashtags, tweets_with_mentions):
+                 tweets_with_hashtags, tweets_with_mentions, mentions):
         self.original_tweet_count = original_count
         self.retweet_count = retweet_count
         self.replies_count = replies_count
         self.tweets_with_hashtags = tweets_with_hashtags
         self.tweets_with_mentions = tweets_with_mentions
+        self.mentions = mentions
+
 
 class TweetCache(object):
     def __init__(self, timestamp, latest_id, original_tweets, retweets, replies):

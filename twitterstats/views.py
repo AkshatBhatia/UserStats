@@ -3,12 +3,13 @@ from sets import Set
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from models.Comments import Tweet, TweetCache, TweetList, TwitterUser, TweetSummary
+from models.Comments import MentionsCount, Tweet, TweetCache, TweetList, TwitterUser, TweetSummary
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.shortcuts import redirect
+import operator
 import tweepy
 import datetime
 
@@ -101,12 +102,20 @@ def tweet_summary(request):
                 count = user_mentions.get(mention_user, 0) + 1
                 user_mentions[mention_user] = count
 
+        sorted_mentions = sorted(user_mentions.items(), key=operator.itemgetter(1))
+        sorted_mentions.reverse()
+        sorted_limited_mentions = sorted_mentions[:10]
+        mentions = []
+        for key, val in sorted_limited_mentions:
+            mentions.append(MentionsCount(key, val))
+
         serializer = TweetSummarySerializer(TweetSummary(
             len(original_tweets),
             len(retweets),
             len(replies),
             tweets_with_hashtags,
-            tweets_with_mentions))
+            tweets_with_mentions,
+            mentions))
 
         return Response(serializer.data)
 

@@ -26,13 +26,17 @@ class TweetSerializer(serializers.Serializer):
     created_at = serializers.IntegerField()
     entities = serializers.DictField()
 
+class MentionsSerializer(serializers.Serializer):
+    mention = serializers.CharField()
+    count = serializers.IntegerField()
+
 class TweetSummarySerializer(serializers.Serializer):
     original_tweet_count = serializers.IntegerField()
     retweet_count = serializers.IntegerField()
     replies_count = serializers.IntegerField()
     tweets_with_hashtags = serializers.IntegerField()
     tweets_with_mentions = serializers.IntegerField()
-
+    mentions = MentionsSerializer(many=True)
 
 class TweetListSerializer(serializers.Serializer):
     total_count = serializers.IntegerField()
