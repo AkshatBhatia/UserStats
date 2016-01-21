@@ -13,7 +13,7 @@ import operator
 import tweepy
 import datetime
 
-consumer_token = 'Jjv00qLJ2AcGvf0HHLyc6kPhm'
+consumer_token = 'YOUR_CONSUMER_TOKEN'
 consumer_secret = 'YOUR_CONSUMER_SECRET'
 
 class UserDetails(APIView):
