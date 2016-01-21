@@ -20,9 +20,15 @@ http://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/
 To test this webapp locally, you need to create your own twitter app. Goto https://apps.twitter.com/ to create one. Once that app is created insert the correct consumer_token and consumer_secret in twitterstats/views.py.
 
 To get started with the server:
-virtualenv userstats
-pip install -r requirements.txt
-python manage.py runserver
+1. virtualenv userstats
+2. pip install -r requirements.txt
+3. python manage.py runserver
+
+To test the server hit the url:
+
+localhost:8000/twitterstats/tweets
+
+You should see some stats about your latest tweets.
 
 
 
