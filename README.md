@@ -17,7 +17,10 @@ The frontend is a single page application. The dependencies for front end are:
 To manage python dependencies we use virtualenv and pip. If you are not familiar with those tools below is a good read:
 http://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/
 
-To test this webapp locally, you need to create your own twitter app. Goto https://apps.twitter.com/ to create one. Once that app is created insert the correct consumer_token and consumer_secret in twitterstats/views.py.
+To test this webapp locally, you need to create your own twitter app. Goto https://apps.twitter.com/ to create one.
+Once that app is created:
+1. Copy settings_local.template to settings_local.py
+2. insert the correct consumer_token and consumer_secret in settings_local.py.
 
 To get started with the server:
 1. virtualenv userstats
