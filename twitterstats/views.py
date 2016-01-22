@@ -1,6 +1,7 @@
 from serializers.CommentSerializer import TweetListSerializer, TwitterUserSerializer, TweetCacheSerializer, TweetSummarySerializer
 from sets import Set
 from django.core.cache import cache
+from django.conf import settings
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from models.Comments import MentionsCount, Tweet, TweetCache, TweetList, TwitterUser, TweetSummary
@@ -13,8 +14,7 @@ import operator
 import tweepy
 import datetime
 
-consumer_token = 'YOUR_CONSUMER_TOKEN'
-consumer_secret = 'YOUR_CONSUMER_SECRET'
+
 
 class UserDetails(APIView):
     def __init__(self):
@@ -201,7 +201,7 @@ def getEpochTime(date):
 @api_view(('GET',))
 def auth(request):
     verifier = request.GET.get('oauth_verifier')
-    oauth = tweepy.OAuthHandler(consumer_token, consumer_secret)
+    oauth = tweepy.OAuthHandler(settings.CONSUMER_TOKEN, settings.CONSUMER_SECRET)
     token = request.session.get('unauthed_token_tw', None)
     # remove the request token now we don't need it
     request.session.delete('unauthed_token_tw')
@@ -230,7 +230,7 @@ def check_key(request):
     return True
 
 def get_redirect_url(request):
-    auth = tweepy.OAuthHandler(consumer_token, consumer_secret)
+    auth = tweepy.OAuthHandler(settings.CONSUMER_TOKEN, settings.CONSUMER_SECRET)
 
     try:
         redirect_url = auth.get_authorization_url(True)
@@ -242,7 +242,7 @@ def get_redirect_url(request):
     return redirect_url
 
 def get_api(request):
-    oauth = tweepy.OAuthHandler(consumer_token, consumer_secret)
+    oauth = tweepy.OAuthHandler(settings.CONSUMER_TOKEN, settings.CONSUMER_SECRET)
     access_key = request.session['access_key_tw']
     access_secret = request.session['access_secret_tw']
     oauth.set_access_token(access_key, access_secret)
@@ -257,6 +257,9 @@ def api_root(request, format=None):
     })
 
 def index(request):
-    template = loader.get_template('twitterstats/index.html')
-    context = RequestContext(request, {})
-    return HttpResponse(template.render(context))
+    if not check_key(request):
+        return redirect(get_redirect_url(request))
+    else:
+        template = loader.get_template('twitterstats/index.html')
+        context = RequestContext(request, {})
+        return HttpResponse(template.render(context))
