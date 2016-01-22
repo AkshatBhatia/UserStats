@@ -21,16 +21,19 @@ To test this webapp locally (tested on mac), go throught the following steps:
 * You need to create your own twitter app. Goto https://apps.twitter.com/ to create one.
 * Install Mysql server on your local machine and create a userstats database.
 * Add mysql to your path. Usually its found in /usr/local/mysql/bin. export PATH=$PATH:/usr/local/mysql/bin
-4. virtualenv userstats
-5. pip install -r requirements.txt
+* virtualenv userstats
+* pip install -r requirements.txt
    : Note that sometimes you might see failures when installing MYSQL_python, because it unable to find mysql config.
    To resolve that issue, make sure mysql is in your path. If the issue persists, checkout http://stackoverflow.com/questions/5178292/pip-install-mysql-python-fails-with-environmenterror-mysql-config-not-found
-6. sudo install_name_tool -change libmysqlclient.18.dylib /usr/local/mysql/lib/libmysqlclient.18.dylib $VIRTUAL_ENV/lib/python2.7/site-packages/_mysql.so
-7. Copy settings_local.template to settings_local.py
-8. Insert the correct consumer_token and consumer_secret in settings_local.py.
-9. Fill in all the required fields for Database settings in setting_local.py.
-10. run python manage.py migrate
-11: run python manage.py runserver
+* sudo install_name_tool -change libmysqlclient.18.dylib /usr/local/mysql/lib/libmysqlclient.18.dylib $VIRTUAL_ENV/lib/python2.7/site-packages/_mysql.so
+* Copy settings_local.template to settings_local.py
+* Insert the correct consumer_token and consumer_secret in settings_local.py.
+* Fill in all the required fields for Database settings in setting_local.py.
+* Setup proper permissions on your mysql directory
+   :sudo chown -R mysql:mysql /usr/local/mysql/
+    sudo chmod -R 755 /usr/local/mysql/
+* run python manage.py migrate
+* run python manage.py runserver
 
 To test the server hit the url:
 
