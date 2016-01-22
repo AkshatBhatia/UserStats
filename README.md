@@ -4,15 +4,15 @@ This is a Web app that provides a framework for visualization of data from vario
 Currently this repository only provides a way to analyze twitter stats. In future there are plans to add email stats, linkedin stats, facebook stats etc as well. 
 
 The backend of the project provides REST APIs to fetch the stats of data from 3rd party services. The backend dependencies are:
-0. Django
-0. Django rest framework
-0. Tweepy
-0. NLTK
+1. Django
+2. Django rest framework
+3. Tweepy
+4. NLTK
 
 The frontend is a single page application. The dependencies for front end are:
-0. Backbone js
-0. D3.js
-0. Bootstrap
+1. Backbone js
+2. D3.js
+3. Bootstrap
 
 To manage python dependencies we use virtualenv and pip. If you are not familiar with those tools below is a good read:
 http://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/
