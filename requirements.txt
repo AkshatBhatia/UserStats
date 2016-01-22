@@ -6,3 +6,4 @@ markdown
 nltk
 prettytable
 tweepy
+MySQL-python
