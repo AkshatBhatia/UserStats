@@ -3,24 +3,24 @@ This is a Web app that provides a framework for visualization of data from vario
 
 Currently this repository only provides a way to analyze twitter stats. In future there are plans to add email stats, linkedin stats, facebook stats etc as well. 
 
-The backend of the project provides REST APIs to fetch the stats of data from 3rd party services. The backend dependencies are:
-1. Django
-2. Django rest framework
-3. Tweepy
-4. NLTK
+The backend of the project provides REST APIs to fetch the stats of data from 3rd party services. The backend dependencies are: 
+* Django
+* Django rest framework 
+* Tweepy
+* NLTK
 
 The frontend is a single page application. The dependencies for front end are:
-1. Backbone js
-2. D3.js
-3. Bootstrap
+* Backbone js
+* D3.js
+* Bootstrap
 
 To manage python dependencies we use virtualenv and pip. If you are not familiar with those tools below is a good read:
 http://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/
 
 To test this webapp locally (tested on mac), go throught the following steps:
-1. you need to create your own twitter app. Goto https://apps.twitter.com/ to create one.
-2. Install Mysql server on your local machine and create a userstats database.
-3. Add mysql to your path. Usually its found in /usr/local/mysql/bin. export PATH=$PATH:/usr/local/mysql/bin
+* You need to create your own twitter app. Goto https://apps.twitter.com/ to create one.
+* Install Mysql server on your local machine and create a userstats database.
+* Add mysql to your path. Usually its found in /usr/local/mysql/bin. export PATH=$PATH:/usr/local/mysql/bin
 4. virtualenv userstats
 5. pip install -r requirements.txt
    : Note that sometimes you might see failures when installing MYSQL_python, because it unable to find mysql config.
