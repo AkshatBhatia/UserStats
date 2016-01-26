@@ -7,3 +7,4 @@ nltk
 prettytable
 tweepy
 MySQL-python
+uWSGI
