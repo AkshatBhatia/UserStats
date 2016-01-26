@@ -18,7 +18,8 @@ To manage python dependencies we use virtualenv and pip. If you are not familiar
 http://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/
 
 To test this webapp locally (tested on mac), go throught the following steps:
-* You need to create your own twitter app. Goto https://apps.twitter.com/ to create one.
+* You need to create your own twitter app. Goto https://apps.twitter.com/ to create one. 
+  Set your callback url to http://127.0.0.1:8000/twitterstats/auth
 * Install Mysql server on your local machine and create a userstats database.
 * Add mysql to your path. Usually its found in /usr/local/mysql/bin. export PATH=$PATH:/usr/local/mysql/bin
 * virtualenv userstats
@@ -40,6 +41,30 @@ To test the server hit the url:
 localhost:8000/twitterstats/tweets
 
 You should see some stats about your latest tweets. Try typing elonmusk in the search box and see the changes.
+
+
+Serving content via nginx.
+For this project we have decided to use nginx as our web server. Following are the steps to enable nginx on your development box.
+
+* Make sure pip list show that uWSGI is installed as a dependency. It is part of requirements.txt and should have been installed already. If not install it.
+* Make sure homebrew is installed.
+* In your twitter app, change your callback url to http://127.0.0.1/twitterstats/auth.
+* brew install nginx. 
+  Note: This installs nginx under /usr/local/Cellar/nginx directory.
+* Change all the paths in userstats_nginx.conf to point to your project directory.
+* Run command python manage.py collectstatic. This should create a static folder in your root project directory.
+* If a site_enabled directory does not exist under nginx, create one. The location should be similar to /usr/local/Cellar/nginx/1.8.0/sites_enabled.
+* sudo ln -s ~/path/to/your/userstats/userstats_nginx.conf /usr/local/Cellar/nginx/1.8.0/sites_enabled/
+* Edit nginx.conf located at /usr/local/etc/nginx/nginx.conf:
+    Remove the entire server configuraton under http. Instead add "include /usr/local/Cellar/nginx/1.8.0/sites_enabled/*;"
+* from userstats virtual env start uwsgi using command: uwsgi --socket userstats.sock --module userstats.wsgi --chmod-socket=666
+* sudo nginx
+
+to test: goto usr localhost/twitterstats
+
+If nginx does not work, you can try to debug the issue by looking at logs located at:
+/usr/local/Cellar/nginx/1.8.0/logs/error.log
+
 
 
 
