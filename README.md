@@ -33,6 +33,8 @@ To test this webapp locally (tested on mac), go throught the following steps:
 * Setup proper permissions on your mysql directory
    :sudo chown -R mysql:mysql /usr/local/mysql/
     sudo chmod -R 755 /usr/local/mysql/
+* brew install memcached
+* run memcached
 * run python manage.py migrate
 * run python manage.py runserver
 

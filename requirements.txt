@@ -1,10 +1,11 @@
 Django
+MySQL-python
 django-filter
 djangorestframework
 ipython
 markdown
 nltk
 prettytable
+python-memcached
 tweepy
-MySQL-python
 uWSGI

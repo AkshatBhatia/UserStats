@@ -74,11 +74,19 @@ WSGI_APPLICATION = 'userstats.wsgi.application'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'tweetstats_cache',
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
         'TIMEOUT': 86400
     }
 }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'LOCATION': 'tweetstats_cache',
+#         'TIMEOUT': 86400
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
