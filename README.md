@@ -67,6 +67,8 @@ to test: goto usr localhost/twitterstats
 If nginx does not work, you can try to debug the issue by looking at logs located at:
 /usr/local/Cellar/nginx/1.8.0/logs/error.log
 
+This project is hosted live at:
+http://ec2-54-69-110-112.us-west-2.compute.amazonaws.com/twitterstats
 
 
 
