@@ -93,37 +93,52 @@ app.AppView = Backbone.View.extend({
 
 var appView = new app.AppView();
 
-// D3 pair of timeseries for retweets and favorites
 function drawGraph() {
-    return nv.addGraph(function () {
-        var chart = nv.models.multiBarChart()
-                .height(500)
-                .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-                .rotateLabels(0)      //Angle to rotate x-axis labels.
-                .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-                .stacked(true)
-                .x(function (d) {
-                    return new Date(d.x);
-                })
-            ;
+    var retweet_data = app.tweets.toJSON().map(function(d){ return [d.created_at, d.retweet_count]; }).sort();
+    var favourite_data = app.tweets.toJSON().map(function(d){ return [d.created_at, d.favorite_count]; }).sort();
 
-        chart.xAxis
-            .tickFormat(function(d) { return d3.time.format("%Y-%m-%d")(d) });
+    // create the chart
+    return $('#chart1').highcharts('StockChart', {
+        chart: {
+            alignTicks: false
+        },
+        colors: ['#7cb5ec', '#90ed7d', '#f7a35c', '#8085e9',
+            '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
+        rangeSelector: {
+            selected: 5
+        },
 
-        chart.yAxis
-            .tickFormat(d3.format(',.f'));
+        title: {
+            text: 'Retweet chart'
+        },
 
-        chart.xScale = d3.time.scale();
-
-        d3.select('#chart1 svg')
-            .attr("height", 500)
-            .datum(tweetData())
-            .transition().duration(100)
-            .call(chart);
-
-        nv.utils.windowResize(chart.update);
-
-        return chart;
+        series: [{
+            type: 'line',
+            name: 'Retweet count',
+            data: retweet_data,
+            dataGrouping: {
+                units: [[
+                    'week', // unit name
+                    [1] // allowed multiples
+                ], [
+                    'month',
+                    [1, 2, 3, 4, 6]
+                ]]
+            }
+        },{
+            type: 'line',
+            name: 'Favourite count',
+            data: favourite_data,
+            dataGrouping: {
+                units: [[
+                    'week', // unit name
+                    [1] // allowed multiples
+                ], [
+                    'month',
+                    [1, 2, 3, 4, 6]
+                ]]
+            }
+        }]
     });
 }
 

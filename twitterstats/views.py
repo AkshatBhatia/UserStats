@@ -132,9 +132,9 @@ def get_tweets(request, user, timeline):
             api_function = api.home_timeline
 
         if user:
-            user_tweets = tweepy.Cursor(api_function, id=user, count=200).items(1000)
+            user_tweets = tweepy.Cursor(api_function, id=user, count=200).items(2000)
         else:
-            user_tweets = tweepy.Cursor(api_function, count=200).items(1000)
+            user_tweets = tweepy.Cursor(api_function, count=200).items(2000)
 
         retweets = []
         replies = []
