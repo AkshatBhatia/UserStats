@@ -84,7 +84,7 @@ def tweet_summary(request):
         user_mentions = {}
         tweets_with_hashtags, tweets_with_mentions, photos, videos, animated_gif = 0, 0, 0, 0, 0
         for tweet in original_tweets + retweets + replies:
-            entities = tweet.get(u'entities')
+            entities = tweet.entities
             tags = entities.get(u'hashtags')
             if len(tags) > 0:
                 tweets_with_hashtags += 1
