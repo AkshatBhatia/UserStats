@@ -39,6 +39,32 @@ app.Summary = Backbone.Model.extend({
 
 app.summary = new app.Summary();
 
+app.User = Backbone.Model.extend({
+    defaults: {
+        id_str: "id_str",
+        name: "name",
+        screen_name: "screen_name",
+        location: 'location',
+        created_at: 'created_at',
+        profile_image_url: 'profile_image_url',
+        follower_count: 'follower_count',
+        favorite_count: 'favorite_count',
+        statuses_count: 'statuses_count'
+    },
+    url: '/twitterstats/user'
+});
+
+app.user = new app.User();
+
+app.UserView = Backbone.View.extend({
+    tagName: 'h1',
+    template: _.template($('#header-template').html()),
+    render: function(){
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    }
+})
+
 // Views
 app.TweetView = Backbone.View.extend({
     tagName: 'tr',
@@ -54,14 +80,21 @@ app.AppView = Backbone.View.extend({
       userId: '#user',
       filtersId: '#filters option:selected',
       user: '',
-      headers: _.template('<tr><th>TweetId</th><th>Author</th><th>Text</th><th data-defaultsort="desc">Favorites</th><th>Retweets</th></tr>'),
-
       events: {
           "click .search": "searchUser",
       },
       initialize: function () {
           app.tweets.on('reset', this.addAll, this);
+          this.fetchUser();
           this.fetchTweets();
+      },
+      fetchUser: function() {
+          app.user.fetch({
+              success: function(){
+                  var view = new app.UserView({model: app.user});
+                  this.$('#header').html(view.render().el);
+              }
+          });
       },
       fetchTweets: function () {
           var that = this;
@@ -118,6 +151,7 @@ app.AppView = Backbone.View.extend({
 
           console.log(this.filters);
 
+          this.fetchUser();
           this.fetchTweets();
       },
       drawGraph: function () {
@@ -138,11 +172,6 @@ app.AppView = Backbone.View.extend({
               rangeSelector: {
                   selected: 5
               },
-
-              title: {
-                  text: 'Retweet chart'
-              },
-
               series: [{
                   type: 'line',
                   name: 'Retweet count',
@@ -197,7 +226,7 @@ app.AppView = Backbone.View.extend({
                   };
               }),
               title: {
-                  text: 'Tweet Summary'
+                  text: 'Summary'
               },
               tooltip: {
                   pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
