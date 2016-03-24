@@ -114,6 +114,9 @@ app.AppView = Backbone.View.extend({
                   filters: this.filters
               },
               success: function () {
+                  var userOverview = new app.UserOverview({model: app.summary});
+                  debugger;
+                  this.$('#user-overview').append(userOverview.render().el);
                   that.drawPieChart();
               }
           });
