@@ -103,11 +103,20 @@
 
 <script type="text/template" id="header-template">
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <h1>
                 <img src='<%= profile_image_url%>' class="img-circle">&nbsp;<%= name %>
                 <small><a href='http://www.twitter.com/<%= screen_name %>'>(@<%= screen_name %>)</a></small>
             </h1>
+        </div>
+        <div class="col-sm-2 text-center">
+            <h1><small>Followers</small> <%= follower_count %></h1>
+        </div>
+        <div class="col-sm-2 text-center">
+            <h1><small>Faviorites</small> <%= favorite_count %></h1>
+        </div>
+        <div class="col-sm-2 text-center">
+            <h1><small>Tweets</small> <%= statuses_count %></h1>
         </div>
 {#        <div class="col-sm-1">#}
 {#            <h1>#}
