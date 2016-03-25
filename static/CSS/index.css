@@ -1,0 +1,17 @@
+.page-header {
+    padding-left: 70px;
+}
+.container-fluid {
+    padding-top: 20px;
+    padding-left: 70px;
+    padding-right: 70px;
+}
+
+.col-sm-4 {
+    padding-left: 100px;
+    padding-top: 53px;
+}
+
+.h2 {
+    font: 'verdana';
+}
