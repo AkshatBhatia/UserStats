@@ -25,7 +25,11 @@ class UserDetails(APIView):
             return redirect(get_redirect_url(request.request))
         else:
             api = get_api(request.request)
-            user_details = api.me()
+            userVar = request.request.GET.get('user', '')
+            if not userVar == u'':
+                user_details = api.get_user(userVar)
+            else:
+                user_details = api.me()
 
             user = TwitterUser(user_details.id_str, user_details.name, user_details.screen_name,
                         user_details.location, user_details.created_at, user_details.profile_image_url,
