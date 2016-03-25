@@ -68,8 +68,8 @@ app.user = new app.User();
 app.UserView = Backbone.View.extend({
     tagName: 'h1',
     template: _.template($('#header-template').html()),
-    render: function(){
-        this.$el.html(this.template(this.model.toJSON()));
+    render: function() {
+        this.$el.html(this.template(app.user.toJSON()));
         return this;
     }
 })
@@ -113,7 +113,7 @@ app.AppView = Backbone.View.extend({
                 user: this.user
               },
               success: function(){
-                  var view = new app.UserView({model: app.user});
+                  var view = new app.UserView();
                   this.$('#header').html(view.render().el);
               }
           });
