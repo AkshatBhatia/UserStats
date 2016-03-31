@@ -82,13 +82,12 @@ def tweet_summary(request):
     else:
         user = request.GET.get('user', u'')
         timeline = u"UserTimeline"
-        original_tweets, retweets, replies = get_tweets(request, user, timeline)
+        original_tweets, retweets, replies = get_entities(request, user, timeline)
 
         hashtags = {}
         user_mentions = {}
         tweets_with_hashtags, tweets_with_mentions, photos, videos, animated_gif = 0, 0, 0, 0, 0
-        for tweet in original_tweets + retweets + replies:
-            entities = tweet.entities
+        for entities in original_tweets + retweets + replies:
             tags = entities.get(u'hashtags')
             if len(tags) > 0:
                 tweets_with_hashtags += 1
@@ -123,6 +122,23 @@ def tweet_summary(request):
 
         return Response(serializer.data)
 
+def get_cached_entities(tweet):
+    return tweet.get('entities')
+
+def get_api_entities(tweet):
+    return tweet.entities
+
+def get_entities(request, user, timeline):
+    cache_key = user + "_" + timeline
+    data_cached, original_tweets, retweets, replies = get_cached_tweets(cache_key)
+    if data_cached:
+        print u'Got data from cache!!'
+        return map(get_cached_entities, original_tweets), map(get_cached_entities, retweets), map(get_cached_entities, replies)
+    else:
+        print u'Got tweets from API!!'
+        original_tweets, retweets, replies = get_tweets_from_api(request, user, timeline, cache_key)
+        return map(get_api_entities, original_tweets), map(get_api_entities, retweets), map(get_api_entities, replies)
+
 def get_tweets(request, user, timeline):
     cache_key = user + "_" + timeline
     data_cached, original_tweets, retweets, replies = get_cached_tweets(cache_key)
@@ -130,40 +146,44 @@ def get_tweets(request, user, timeline):
         print u'Got data from cache!!'
         return original_tweets, retweets, replies
     else:
-        api = get_api(request)
-        api_function = api.user_timeline
-        if u"HomeTimeline" == timeline:
-            api_function = api.home_timeline
+        print u'Got tweets from API!!'
+        return get_tweets_from_api(request, user, timeline, cache_key)
 
-        if user:
-            user_tweets = tweepy.Cursor(api_function, id=user, count=200).items(2000)
+def get_tweets_from_api(request, user, timeline, cache_key):
+    api = get_api(request)
+    api_function = api.user_timeline
+    if u"HomeTimeline" == timeline:
+        api_function = api.home_timeline
+
+    if user:
+        user_tweets = tweepy.Cursor(api_function, id=user, count=200).items(2000)
+    else:
+        user_tweets = tweepy.Cursor(api_function, count=200).items(2000)
+
+    retweets = []
+    replies = []
+    original_tweets = []
+    latest_id = u"1"
+    for tweet in user_tweets:
+        if tweet.id_str > latest_id:
+            latest_id = tweet.id_str
+        t = Tweet(id_str=tweet.id_str,
+                  author=tweet.author.screen_name,
+                  text=tweet.text,
+                  fav_count=tweet.favorite_count,
+                  retweet_count=tweet.retweet_count,
+                  created_at=getEpochTime(tweet.created_at),
+                  entities =tweet.entities)
+        if tweet.text.startswith("RT"):
+            retweets.append(t)
+        elif tweet.text.startswith("@"):
+            replies.append(t)
         else:
-            user_tweets = tweepy.Cursor(api_function, count=200).items(2000)
+            original_tweets.append(t)
 
-        retweets = []
-        replies = []
-        original_tweets = []
-        latest_id = u"1"
-        for tweet in user_tweets:
-            if tweet.id_str > latest_id:
-                latest_id = tweet.id_str
-            t = Tweet(id_str=tweet.id_str,
-                      author=tweet.author.screen_name,
-                      text=tweet.text,
-                      fav_count=tweet.favorite_count,
-                      retweet_count=tweet.retweet_count,
-                      created_at=getEpochTime(tweet.created_at),
-                      entities =tweet.entities)
-            if tweet.text.startswith("RT"):
-                retweets.append(t)
-            elif tweet.text.startswith("@"):
-                replies.append(t)
-            else:
-                original_tweets.append(t)
+    save_to_cache(cache_key, original_tweets, retweets, replies, latest_id)
 
-        save_to_cache(cache_key, original_tweets, retweets, replies, latest_id)
-
-        return original_tweets, retweets, replies
+    return original_tweets, retweets, replies
 
 def get_cached_tweets(cache_key):
     cached_data = cache.get(cache_key)
