@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^summary/$', views.tweet_summary, name='usertweets'),
     url(r'^auth/$', views.auth, name='usertweets'),
     url(r'^api/$', views.api_root),
+    url(r'^test/$', views.test, name='test'),
 ]

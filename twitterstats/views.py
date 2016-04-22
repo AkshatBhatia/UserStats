@@ -186,7 +186,9 @@ def get_tweets_from_api(request, user, timeline, cache_key):
     return original_tweets, retweets, replies
 
 def get_cached_tweets(cache_key):
+    print u'Reading cache for key %s' % cache_key
     cached_data = cache.get(cache_key)
+
     if cached_data:
         serializer = TweetCacheSerializer(data=cached_data)
         serializer.is_valid()
@@ -206,20 +208,17 @@ def save_to_cache(key, original_tweets, retweets, replies, latest_id):
         retweets,
         replies))
 
+    print u'Setting cache for key %s' % key
     cache.set(key, serializer.data)
+    import ipdb; ipdb.set_trace()
 
 
 def getEpochTime(date):
     return int((date - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
-
-# @api_view(('GET',))
-# def tweet_stats_by_month(request):
-#     if not check_key(request):
-#         return redirect(get_redirect_url(request))
-#     else:
-#         api = get_api(request)
-#         user = request.GET.get('user', None)
+@api_view(('GET',))
+def test(request):
+    return redirect("http://www.linkedin.com")
 
 
 @api_view(('GET',))
