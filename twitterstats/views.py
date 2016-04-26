@@ -210,7 +210,6 @@ def save_to_cache(key, original_tweets, retweets, replies, latest_id):
 
     print u'Setting cache for key %s' % key
     cache.set(key, serializer.data)
-    import ipdb; ipdb.set_trace()
 
 
 def getEpochTime(date):
@@ -218,7 +217,10 @@ def getEpochTime(date):
 
 @api_view(('GET',))
 def test(request):
-    return redirect("http://www.linkedin.com")
+    #return redirect("http://www.linkedin.com")
+    template = loader.get_template('twitterstats/test.html')
+    context = RequestContext(request, {})
+    return HttpResponse(template.render(context))
 
 
 @api_view(('GET',))
