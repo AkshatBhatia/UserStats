@@ -217,10 +217,10 @@ def getEpochTime(date):
 
 @api_view(('GET',))
 def test(request):
-    #return redirect("http://www.linkedin.com")
-    template = loader.get_template('twitterstats/test.html')
-    context = RequestContext(request, {})
-    return HttpResponse(template.render(context))
+    return redirect("https://www.linkedin.com/comm/jobs/search/")
+    # template = loader.get_template('twitterstats/test.html')
+    # context = RequestContext(request, {})
+    # return HttpResponse(template.render(context))
 
 
 @api_view(('GET',))
