@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'twitterstats',
+    'jokes',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
