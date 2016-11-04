@@ -9,6 +9,44 @@
 <!-- ========= -->
 <!-- Your HTML -->
 <!-- ========= -->
-Hello World!!.
+<div id='hello_name'>Hello World!!.</div>
 </body>
+<script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC6QWJc5muKzU6wJyI7QLPYuoWycZJMLCQ",
+    authDomain: "jokes-43927.firebaseapp.com",
+    databaseURL: "https://jokes-43927.firebaseio.com",
+    storageBucket: "",
+    messagingSenderId: "671876801118"
+  };
+  firebase.initializeApp(config);
+
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('https://www.googleapis.com/auth/plus.login');
+  provider.setCustomParameters({
+    'login_hint': 'user@example.com'
+  });
+
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    // ...
+    console.log("user is: " + user);
+    document.getElementById('hello_name').innerHTML = "Hello " + user.displayName;
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
+
+</script>
 </html>
