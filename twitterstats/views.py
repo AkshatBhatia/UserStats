@@ -225,6 +225,8 @@ def test(request):
 
 @api_view(('GET',))
 def auth(request):
+    import ipdb;
+    ipdb.set_trace()
     verifier = request.GET.get('oauth_verifier')
     oauth = tweepy.OAuthHandler(settings.CONSUMER_TOKEN, settings.CONSUMER_SECRET)
     token = request.session.get('unauthed_token_tw', None)
@@ -282,9 +284,13 @@ def api_root(request, format=None):
     })
 
 def index(request):
+    import ipdb;
+    ipdb.set_trace()
     if not check_key(request):
         return redirect(get_redirect_url(request))
     else:
         template = loader.get_template('twitterstats/index.html')
-        context = RequestContext(request, {})
-        return HttpResponse(template.render(context))
+        # context = RequestContext(request, {})
+        import ipdb;
+        ipdb.set_trace()
+        return HttpResponse(template.render({}))

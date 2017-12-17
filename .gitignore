@@ -2,3 +2,4 @@
 .ropeproject/
 *.pyc
 settings_local.py
+userstats/
