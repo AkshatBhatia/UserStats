@@ -4,7 +4,7 @@ This is a Web app that provides a framework for visualization of data from vario
 Currently this repository only provides a way to analyze twitter stats. In future there are plans to add email stats, linkedin stats, facebook stats etc as well. 
 
 The backend of the project provides REST APIs to fetch the stats of data from 3rd party services. The backend dependencies are: 
-* Django
+* Django 
 * Django rest framework 
 * Tweepy
 * NLTK
